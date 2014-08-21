@@ -55,9 +55,9 @@ void dpATXTZG(float atzxg, float atyzg, float atxyg) {
 }
 
 void loop() {
-  float x = analogRead(0) * VCC / 1024;
-  float y = analogRead(1) * VCC / 1024;
-  float z = analogRead(2) * VCC / 1024;
+  float x = analogRead(A5) * VCC / 1024;
+  float y = analogRead(A4) * VCC / 1024;
+  float z = analogRead(A3) * VCC / 1024;
 
   dpXTZ(x, y, z);
 

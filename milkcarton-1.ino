@@ -4,10 +4,6 @@
 
 boolean DEBUG = true;
 
-void setup() {
-  Serial.begin(9600);
-}
-
 void dpXTZ(int x, int y, int z) {
   if (!DEBUG) return;
   Serial.print("X=");
@@ -16,6 +12,10 @@ void dpXTZ(int x, int y, int z) {
   Serial.print(y);
   Serial.print("  Z=");
   Serial.println(z);
+}
+
+void setup() {
+  Serial.begin(9600);
 }
 
 void loop() {

@@ -3,13 +3,20 @@
 /* astyle --style=google --indent=spaces=2 --pad-oper carton-1.ino */
 
 const boolean DEBUG = true;
+const int DELAY_DEFAULT = 1000; // msec
+const int DELAY_MOVING = 30; // msec
+const int MOVING_WINDOW_TIME = 1000; // msec
+
+const int CONDITION_X = 100;
+const int CONDITION_Y = 100;
+const int CONDITION_Z = 100;
 
 void dp(char *str) {
   if (!DEBUG) return;
   Serial.println(str);
 }
 
-void dpXTZ(int x, int y, int z) {
+void dpXYZ(int x, int y, int z) {
   if (!DEBUG) return;
   Serial.print("X=");
   Serial.print(x);
@@ -28,6 +35,21 @@ void publish(int x, int y, int z) {
   snprintf(str, str_maxlen, "1,%03x,%03x,%03x", x, y, z);
   dp(str);
   Spark.publish("accelerationDisptched", str);
+  dpXYZ(x, y, z);
+}
+
+bool detectMoving(int x, int y, int z) {
+  static int oldX = 0;
+  static int oldY = 0;
+  static int oldZ = 0;
+  bool ret = false;
+  ret |= abs(oldX - x) >= CONDITION_X;
+  ret |= abs(oldY - y) >= CONDITION_Y;
+  ret |= abs(oldZ - z) >= CONDITION_Z;
+  oldX = x;
+  oldY = y;
+  oldZ = z;
+  return ret;
 }
 
 void setup() {
@@ -35,12 +57,25 @@ void setup() {
 }
 
 void loop() {
+  static int delayTime = DELAY_DEFAULT;
+  static int startMoving = 0;
   int x = analogRead(A5);
   int y = analogRead(A4);
   int z = analogRead(A3);
 
-  publish(x, y, z);
-  dpXTZ(x, y, z);
+  if (startMoving == 0) {
+    if (detectMoving(x, y, z)) {
+      delayTime = DELAY_MOVING;
+      startMoving = millis();
+      publish(x, y, z);
+    }
+  } else {
+    publish(x, y, z);
+    if (millis() - startMoving >= MOVING_WINDOW_TIME) {
+      delayTime = DELAY_DEFAULT;
+      startMoving = 0;
+    }
+  }
 
-  delay(300);
+  delay(delayTime);
 }

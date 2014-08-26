@@ -2,7 +2,7 @@
 /* vim: set ts=2  sw=2 sts=2 et si: */
 /* astyle --style=google --indent=spaces=2 --pad-oper carton-1.ino */
 
-boolean DEBUG = true;
+const boolean DEBUG = true;
 
 void dp(char *str) {
   if (!DEBUG) return;
@@ -19,10 +19,6 @@ void dpXTZ(int x, int y, int z) {
   Serial.println(z);
 }
 
-void setup() {
-  Serial.begin(9600);
-}
-
 void publish(int x, int y, int z) {
   // analogRead return 0 to 4095.
   // "f,fff,fff,fff" as maximum
@@ -32,6 +28,10 @@ void publish(int x, int y, int z) {
   snprintf(str, str_maxlen, "1,%03x,%03x,%03x", x, y, z);
   dp(str);
   Spark.publish("accelerationDisptched", str);
+}
+
+void setup() {
+  Serial.begin(9600);
 }
 
 void loop() {

@@ -5,11 +5,11 @@
 #define DEBUG_LOG false
 
 #include "gtest/gtest.h"
-#include "arduino-mock/Arduino.h"
-#include "arduino-mock/Serial.h"
+#include "arduino-mock/arduino.h"
+#include "arduino-mock/serial.h"
 Serial_ Serial;
 
-#include "arduino-mock/Spark.h"
+#include "arduino-mock/spark.h"
 Spark_ Spark;
 
 #include "../milkcarton-1.ino"

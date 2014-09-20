@@ -2,8 +2,8 @@
 /* vim: set ts=2  sw=2 sts=2 et si: */
 /* astyle --style=google --indent=spaces=2 --pad-oper carton-1.ino */
 
-#ifndef DEBUG
-#define DEBUG true
+#ifndef DEBUG_LOG
+#define DEBUG_LOG true
 #endif
 const int DELAY_DEFAULT = 1000; // msec
 const int DELAY_MOVING = 30; // msec
@@ -14,12 +14,12 @@ const int CONDITION_Y = 100;
 const int CONDITION_Z = 100;
 
 void dp(char *str) {
-  if (!DEBUG) return;
+  if (!DEBUG_LOG) return;
   Serial.println(str);
 }
 
 void dpXYZ(int x, int y, int z) {
-  if (!DEBUG) return;
+  if (!DEBUG_LOG) return;
   Serial.print("X=");
   Serial.print(x);
   Serial.print("  Y=");

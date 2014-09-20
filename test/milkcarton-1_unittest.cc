@@ -2,7 +2,7 @@
 /* vim: set ts=2  sw=2 sts=2 et si: */
 /* astyle --style=google --indent=spaces=2 --pad-oper milkcarton-1_unittest.cc*/
 
-#define DEBUG false
+#define DEBUG_LOG false
 
 #include "gtest/gtest.h"
 #include "arduino-mock/Arduino.h"

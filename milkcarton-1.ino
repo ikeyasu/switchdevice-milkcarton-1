@@ -2,7 +2,9 @@
 /* vim: set ts=2  sw=2 sts=2 et si: */
 /* astyle --style=google --indent=spaces=2 --pad-oper carton-1.ino */
 
-const boolean DEBUG = true;
+#ifndef DEBUG
+#define DEBUG true
+#endif
 const int DELAY_DEFAULT = 1000; // msec
 const int DELAY_MOVING = 30; // msec
 const int MOVING_WINDOW_TIME = 1000; // msec
@@ -32,7 +34,7 @@ void publish(int x, int y, int z) {
   // (format),(x),(y),(z)
   const int str_maxlen = 1 + 1 + 3 + 1 + 3 + 1 + 3 + 1;
   char str[str_maxlen];
-  snprintf(str, str_maxlen, "1,%03x,%03x,%03x", x, y, z);
+  snprintf(str, str_maxlen, "1,%x,%x,%x", x, y, z);
   dp(str);
   Spark.publish("accelerationDisptched", str);
   dpXYZ(x, y, z);
@@ -59,9 +61,9 @@ void setup() {
 void loop() {
   static int delayTime = DELAY_DEFAULT;
   static int startMoving = 0;
-  int x = analogRead(A5);
-  int y = analogRead(A4);
-  int z = analogRead(A3);
+  int x = analogRead(5);
+  int y = analogRead(4);
+  int z = analogRead(3);
 
   if (startMoving == 0) {
     if (detectMoving(x, y, z)) {

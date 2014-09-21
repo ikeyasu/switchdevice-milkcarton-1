@@ -13,6 +13,8 @@ const int CONDITION_X = 100;
 const int CONDITION_Y = 100;
 const int CONDITION_Z = 100;
 
+const int MAX_PUBLISH = 5;
+
 void dp(char *str) {
   if (!DEBUG_LOG) return;
   Serial.println(str);
@@ -28,16 +30,36 @@ void dpXYZ(int x, int y, int z) {
   Serial.println(z);
 }
 
+const int PUBLISH_BUFFER_MAX_LEN = 63;
+static char gPublishBuffer[PUBLISH_BUFFER_MAX_LEN] = {'2'};
+static int gPublishBufferLen = 1;
+
+void publishClear() {
+  gPublishBufferLen = 1;
+}
+
 void publish(int x, int y, int z) {
   // analogRead return 0 to 4095.
-  // "f,fff,fff,fff" as maximum
-  // (format),(x),(y),(z)
-  const int str_maxlen = 1 + 1 + 3 + 1 + 3 + 1 + 3 + 1;
+  // fff is maximum
+  // 2,(x),(y),(z),(x),(y),(z),(x),(y),(z)...(up to 63 bytes)..
+  const int str_maxlen = 1 + 3 + 1 + 3 + 1 + 3 + 1;
   char str[str_maxlen];
-  snprintf(str, str_maxlen, "1,%x,%x,%x", x, y, z);
-  dp(str);
-  Spark.publish("accelerationDisptched", str);
+  int len = snprintf(str, str_maxlen, ",%x,%x,%x", x, y, z);
+  if (gPublishBufferLen + len > PUBLISH_BUFFER_MAX_LEN) {
+    gPublishBuffer[gPublishBufferLen] = '\0';
+    Spark.publish("accelerationDisptched", gPublishBuffer);
+    publishClear();
+  }
+  strncpy(gPublishBuffer + gPublishBufferLen, str, len);
+  gPublishBufferLen += len;
+  dp(gPublishBuffer);
   dpXYZ(x, y, z);
+}
+
+void publishAll() {
+  gPublishBuffer[gPublishBufferLen] = '\0';
+  Spark.publish("accelerationDisptched", gPublishBuffer);
+  publishClear();
 }
 
 bool detectMoving(int x, int y, int z) {

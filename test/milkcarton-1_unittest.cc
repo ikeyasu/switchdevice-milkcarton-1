@@ -31,7 +31,7 @@ TEST(detectMoving, normal) {
 
   EXPECT_FALSE(detectMoving(0, 0, 0));
   EXPECT_TRUE(detectMoving(100, 100, 100));
-  EXPECT_TRUE(detectMoving(0, 0, 0));
+  EXPECT_FALSE(detectMoving(0, 0, 0));
   EXPECT_FALSE(detectMoving(10, 10, 10));
   EXPECT_FALSE(detectMoving(0, 0, 0));
   EXPECT_TRUE(detectMoving(100, 0, 0));

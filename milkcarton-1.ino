@@ -41,16 +41,10 @@ void publish(int x, int y, int z) {
 }
 
 bool detectMoving(int x, int y, int z) {
-  static int oldX = 0;
-  static int oldY = 0;
-  static int oldZ = 0;
   bool ret = false;
-  ret |= abs(oldX - x) >= CONDITION_X;
-  ret |= abs(oldY - y) >= CONDITION_Y;
-  ret |= abs(oldZ - z) >= CONDITION_Z;
-  oldX = x;
-  oldY = y;
-  oldZ = z;
+  ret |= abs(x) >= CONDITION_X;
+  ret |= abs(y) >= CONDITION_Y;
+  ret |= abs(z) >= CONDITION_Z;
   return ret;
 }
 
